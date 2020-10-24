@@ -474,12 +474,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_face_detection"><strong>Face Detection</strong></a>
 <ul class="sectlevel2">
-<li><a href="#_haar_cascade_face_detection">Haar Cascade-Face Detection</a></li>
-<li><a href="#_custum_haar_model">Custum Haar Model</a></li>
-<li><a href="#_yolov3_cascade_face_detection">YoloV3 Cascade-Face Detection</a></li>
+<li><a href="#_haar_cascade_face_detection"><strong>Haar Cascade-Face Detection</strong></a></li>
+<li><a href="#_custum_haar_model"><strong>Custum Haar Model</strong></a></li>
+<li><a href="#_yolov3_cascade_face_detection"><strong>YoloV3 Cascade-Face Detection</strong></a></li>
 </ul>
 </li>
-<li><a href="#_hand_gesture_recognition"><strong>Hand Gesture Recognition</strong></a></li>
+<li><a href="#_hand_gesture_recognition"><strong>Hand Gesture Recognition</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_hand_detection"><strong>Hand Detection</strong></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1373,7 +1377,7 @@ cv2.destroyAllWindows()</pre>
 <h2 id="_face_detection"><strong>Face Detection</strong></h2>
 <div class="sectionbody">
 <div class="sect2 data-line-590">
-<h3 id="_haar_cascade_face_detection">Haar Cascade-Face Detection</h3>
+<h3 id="_haar_cascade_face_detection"><strong>Haar Cascade-Face Detection</strong></h3>
 <div class="paragraph data-line-592">
 <p>Predefined Model <a href="https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml">Here</a></p>
 </div>
@@ -1412,7 +1416,7 @@ cv2.destroyAllWindows()</pre>
 </div>
 </div>
 <div class="sect2 data-line-612">
-<h3 id="_custum_haar_model">Custum Haar Model</h3>
+<h3 id="_custum_haar_model"><strong>Custum Haar Model</strong></h3>
 <div class="paragraph data-line-614">
 <p>&gt;Referred <a href="https://www.researchgate.net/publication/338680205_Building_Custom_HAAR-Cascade_Classifier_for_face_Detection">this</a> paper , Simple and powerful explanation.</p>
 </div>
@@ -1425,7 +1429,7 @@ cv2.destroyAllWindows()</pre>
 </div>
 </div>
 <div class="sect2 data-line-621">
-<h3 id="_yolov3_cascade_face_detection">YoloV3 Cascade-Face Detection</h3>
+<h3 id="_yolov3_cascade_face_detection"><strong>YoloV3 Cascade-Face Detection</strong></h3>
 <div class="paragraph data-line-623">
 <p>&gt;Yolo has a person class in thier predefined model</p>
 </div>
@@ -1442,7 +1446,7 @@ cv2.destroyAllWindows()</pre>
 <h2 id="_hand_gesture_recognition"><strong>Hand Gesture Recognition</strong></h2>
 <div class="sectionbody">
 <div class="paragraph data-line-632">
-<p>Can be devided into 7 main steps</p>
+<p><strong>Can be devided into 7 main steps</strong></p>
 </div>
 <div class="paragraph data-line-634">
 <p>&gt;Image Acquisition Module</p>
@@ -1467,7 +1471,7 @@ Classification</p>
 <p>&gt;Testing and RE-training.</p>
 </div>
 <div class="paragraph data-line-649">
-<p>Or be devided into 3 major steps</p>
+<p><strong>Or be devided into 3 major steps</strong></p>
 </div>
 <div class="paragraph data-line-651">
 <p>&gt;Hand detection</p>
@@ -1478,12 +1482,169 @@ Classification</p>
 <div class="paragraph data-line-655">
 <p>&gt;Recognition.</p>
 </div>
+<div class="sect2 data-line-657">
+<h3 id="_hand_detection"><strong>Hand Detection</strong></h3>
+<div class="paragraph data-line-659">
+<p>mainly Concentrated on 3 models</p>
+</div>
+<div class="paragraph data-line-661">
+<p>1.Haar model</p>
+</div>
+<div class="paragraph data-line-663">
+<p>2.YOLOV3 model</p>
+</div>
+<div class="paragraph data-line-665">
+<p>3.Tensorflow-SavedModel protocol
+buffer(.Pb)</p>
+</div>
+<div class="sect3 data-line-668">
+<h4 id="_haar_cascade_for_hand_detection"><strong>Haar Cascade For Hand Detection</strong></h4>
+<div class="paragraph data-line-670">
+<p>&gt;Download predifened model from <a href="https://github.com/Balaje/OpenCV/tree/master/haarcascades">Here</a></p>
+</div>
+<div class="paragraph data-line-672">
+<p>Result:</p>
+</div>
+<div class="imageblock text-center data-line-674">
+<div class="content">
+<img src="images/handhaaar.png" alt="just for fun" width="600" height="600">
+</div>
+</div>
+</div>
+<div class="sect3 data-line-676">
+<h4 id="_yolov3_hand_detection"><strong>Yolov3 Hand detection</strong></h4>
+<div class="paragraph data-line-678">
+<p>Very high efficiency in detecting when compared to haar model. It can detect any hand poses from a noisy image too. But fps is low than expected.</p>
+</div>
+<div class="paragraph data-line-680">
+<p>Referred this <a href="https://github.com/cansik/yolo-hand-detection">paper</a></p>
+</div>
+<div class="paragraph data-line-682">
+<p>Result:</p>
+</div>
+<div class="imageblock text-center data-line-684">
+<div class="content">
+<img src="images/yolohand.png" alt="just for fun" width="600" height="600">
+</div>
+</div>
+<div class="listingblock data-line-686">
+<div class="content">
+<pre>def detect_objects(img, net, outputLayers):
+	blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(320, 320), mean=(0, 0, 0), swapRB=True, crop=False)
+	net.setInput(blob)
+	outputs = net.forward(outputLayers)
+	return blob, outputs</pre>
+</div>
+</div>
+<div class="paragraph data-line-694">
+<p>&gt;Pass the wieghts and config file to the script.</p>
+</div>
+<div class="listingblock data-line-696">
+<div class="content">
+<pre>net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")</pre>
+</div>
+</div>
+<div class="paragraph data-line-700">
+<p>&gt;To reduce multiple rectangles from the window we do Non-maximum Suppression</p>
+</div>
+<div class="listingblock data-line-702">
+<div class="content">
+<pre>indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)</pre>
+</div>
+</div>
+</div>
+<div class="sect3 data-line-706">
+<h4 id="_hand_detection_tf_ssd"><strong>Hand detection TF (ssd)</strong></h4>
+<div class="paragraph data-line-708">
+<p>Reffered this <a href="https://medium.com/@victor.dibia/how-to-build-a-real-time-hand-detector-using-neural-networks-ssd-on-tensorflow-d6bac0e4b2ce">Paper</a></p>
+</div>
+<div class="paragraph data-line-710">
+<p>Frozen Model Available <a href="https://github.com/victordibia/handtracking">Here</a></p>
+</div>
+<div class="paragraph data-line-712">
+<p>&gt;We can do hand tracking in 3 lines of code, no installation, no model training, all in the <a href="https://victordibia.github.io/handtrack.js/">browser</a>.</p>
+</div>
+<div class="paragraph data-line-714">
+<p>&gt;Or google&#8217;s Mediapipe is <a href="https://google.github.io/mediapipe/">there</a> For Android,Browser,desktop, python and ios.</p>
+</div>
+<div class="paragraph data-line-716">
+<p>&gt;Try MEDIAPIPE <a href="https://viz.mediapipe.dev/demo/hand_tracking">Quickly</a> using Browser</p>
+</div>
+<div class="paragraph data-line-718">
+<p>&gt;Sample Code</p>
+</div>
+<div class="listingblock data-line-719">
+<div class="content">
+<pre>import cv2
+import time
+# Load a model imported from Tensorflow
+tensorflowNet = cv2.dnn.readNetFromTensorflow('frozen_inference_graph.pb','graph1.pbtxt')
+
+cap = cv2.VideoCapture(0)
+# Input image
+start = time.time()
+count=0
+while(1):
+    ret, frame = cap.read()
+    img = cv2.resize(frame, (640, 480))
+    rows, cols, channels = img.shape
+
+    # Use the given image as input, which needs to be blob(s).
+    tensorflowNet.setInput(cv2.dnn.blobFromImage(img, size=(300, 300), swapRB=True, crop=False))
+
+    # Runs a forward pass to compute the net output
+    networkOutput = tensorflowNet.forward()
+
+    # Loop on the outputs
+    for detection in networkOutput[0,0]:
+        print(detection[2])
+        score = float(detection[2])
+        print(score)
+        if score &gt; 0.6:
+
+            left = detection[3] * cols
+            top = detection[4] * rows
+            right = detection[5] * cols
+            bottom = detection[6] * rows
+
+            #draw a red rectangle around detected objects
+            cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
+
+    # Show the image with a rectagle surrounding the detected objects
+    cv2.imshow('img',img)
+    k = cv2.waitKey(1) &amp; 0xff
+    if k == 27:
+        break
+    count+=1
+end = time.time()
+seconds = end - start
+print("Time taken : {0} seconds".format(seconds))
+fps  =count / seconds
+print ("Estimated frames per second : {0}".format(fps))
+cv2.waitKey()
+cv2.destroyAllWindows()</pre>
+</div>
+</div>
+<div class="paragraph data-line-771">
+<p>&gt;Convert keras H5 model to pb <a href="https://www.tensorflow.org/guide/keras/save_and_serialize">model</a></p>
+</div>
+<div class="paragraph data-line-773">
+<p>&gt;If we have .pb file of tensorflow then we are good to go(freezed model preferrable).</p>
+</div>
+<div class="paragraph data-line-775">
+<p>&gt;To use in openCV we want an extra file from .pb that is 'pbtxt'. this can be generated from Opencv git <a href="https://github.com/opencv/opencv/tree/master/samples/dnn">repo</a>.</p>
+</div>
+<div class="paragraph data-line-777">
+<p>&gt;<a href="https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API">refer</a></p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-10-23 22:54:30 +0550
+Last updated 2020-10-24 14:11:48 +0550
 </div>
 </div>
 </body>
